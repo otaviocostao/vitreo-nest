@@ -15,6 +15,12 @@ import { ProductsModule } from './products/products.module';
 import { Product } from './products/entities/product.entity';
 import { Lens } from './products/entities/lens.entity';
 import { Frame } from './products/entities/frame.entity';
+import { PrescriptionsModule } from './prescriptions/prescriptions.module';
+import { Prescription } from './prescriptions/entities/prescription.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Order } from './orders/entities/order.entity';
+import { OrderItem } from './orders/entities/order-item.entity';
+import { Payment } from './orders/entities/payment.entity';
 
 @Module({
   imports: [
@@ -31,7 +37,7 @@ import { Frame } from './products/entities/frame.entity';
         username: configService.get<string>('DB_USERNAME', 'postgres'),
         password: configService.get<string>('DB_PASSWORD', 'postgres'),
         database: configService.get<string>('DB_DATABASE', 'vitreo_db'),
-        entities: [Customer, Company, Brand, Supplier, Product, Lens, Frame],
+        entities: [Customer, Company, Brand, Supplier, Product, Lens, Frame, Prescription, Order, OrderItem, Payment],
         synchronize: true,
       }),
     }),
@@ -40,6 +46,8 @@ import { Frame } from './products/entities/frame.entity';
     BrandsModule,
     SuppliersModule,
     ProductsModule,
+    PrescriptionsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
