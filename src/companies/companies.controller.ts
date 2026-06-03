@@ -18,12 +18,14 @@ import {
   ApiConflictResponse,
   ApiNoContentResponse,
   ApiParam,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
 
+@ApiBearerAuth()
 @ApiTags('companies')
 @Controller('companies')
 export class CompaniesController {

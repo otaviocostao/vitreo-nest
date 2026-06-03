@@ -15,12 +15,14 @@ import {
   ApiNotFoundResponse,
   ApiConflictResponse,
   ApiParam,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 
+@ApiBearerAuth()
 @ApiTags('customers')
 @Controller('customers')
 export class CustomersController {

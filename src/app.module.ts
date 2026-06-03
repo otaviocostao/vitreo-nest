@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -21,6 +22,10 @@ import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
 import { Payment } from './orders/entities/payment.entity';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -37,7 +42,20 @@ import { Payment } from './orders/entities/payment.entity';
         username: configService.get<string>('DB_USERNAME', 'postgres'),
         password: configService.get<string>('DB_PASSWORD', 'postgres'),
         database: configService.get<string>('DB_DATABASE', 'vitreo_db'),
-        entities: [Customer, Company, Brand, Supplier, Product, Lens, Frame, Prescription, Order, OrderItem, Payment],
+        entities: [
+          Customer,
+          Company,
+          Brand,
+          Supplier,
+          Product,
+          Lens,
+          Frame,
+          Prescription,
+          Order,
+          OrderItem,
+          Payment,
+          User,
+        ],
         synchronize: true,
       }),
     }),
@@ -48,9 +66,17 @@ import { Payment } from './orders/entities/payment.entity';
     ProductsModule,
     PrescriptionsModule,
     OrdersModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
 
