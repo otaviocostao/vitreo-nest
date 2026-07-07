@@ -50,6 +50,11 @@ export class CreateCustomerDto {
   @IsOptional()
   neighborhood?: string;
 
+  @ApiPropertyOptional({ description: 'Address complement', example: 'Apt 101' })
+  @IsString()
+  @IsOptional()
+  complement?: string;
+
   @ApiPropertyOptional({ description: 'City name', example: 'São Paulo' })
   @IsString()
   @IsOptional()

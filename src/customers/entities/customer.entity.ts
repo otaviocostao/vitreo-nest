@@ -39,6 +39,10 @@ export class Customer {
   @Column({ nullable: true })
   neighborhood?: string;
 
+  @ApiPropertyOptional({ description: 'Address complement', example: 'Apt 101' })
+  @Column({ nullable: true })
+  complement?: string;
+
   @ApiPropertyOptional({ description: 'City name', example: 'São Paulo' })
   @Column({ nullable: true })
   city?: string;
