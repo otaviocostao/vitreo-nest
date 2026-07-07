@@ -7,6 +7,11 @@ export class CreateBrandDto {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({ description: 'The supplier of the brand' })
+  @IsString()
+  @IsNotEmpty()
+  supplierId: string;
+
   @ApiPropertyOptional({ description: 'Indicates if the brand is active', default: true })
   @IsBoolean()
   @IsOptional()

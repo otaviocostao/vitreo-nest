@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Brand } from 'src/brands/entities/brand.entity';
 
 @Entity('suppliers')
 export class Supplier {
@@ -66,4 +67,7 @@ export class Supplier {
   @ApiPropertyOptional({ description: 'ZIP/Postal code - 8 digits', example: '01310100' })
   @Column({ name: 'zip_code', length: 8, nullable: true })
   zipCode?: string;
+
+  @OneToMany(() => Brand, (brand) => brand.supplier, { nullable: true, eager: false })
+  brands?: Brand[];
 }

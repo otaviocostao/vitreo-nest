@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Supplier } from 'src/suppliers/entities/supplier.entity';
 
 @Entity('brands')
 export class Brand {
@@ -10,6 +11,13 @@ export class Brand {
   @ApiProperty({ description: 'Name of the brand', example: 'Ray-Ban' })
   @Column({ unique: true, nullable: false })
   name: string;
+
+  @Column({ name: 'supplier_id', nullable: true })
+  supplierId: string;
+
+  @ManyToOne(() => Supplier, { nullable: true, eager: false })
+  @JoinColumn({ name: 'supplier_id' })
+  supplier: Supplier;
 
   @ApiProperty({ description: 'Indicates if the brand is active', default: true })
   @Column({ default: true, nullable: false })
