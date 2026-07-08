@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, TableInheritance, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, TableInheritance, ManyToOne, JoinColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Supplier } from '../../suppliers/entities/supplier.entity';
 import { Brand } from '../../brands/entities/brand.entity';
@@ -50,4 +50,8 @@ export abstract class Product {
   @ApiProperty({ description: 'Indicates if the product is active', default: true })
   @Column({ name: 'is_active', default: true, nullable: false })
   isActive: boolean;
+
+  @ApiProperty({ description: 'The profit margin of the product in percent', example: 50.00 })
+  @Column('decimal', { name: 'profit_margin', precision: 10, scale: 2, nullable: true })
+  profitMargin: number;
 }

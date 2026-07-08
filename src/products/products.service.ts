@@ -40,6 +40,7 @@ export class ProductsService {
     }
 
     let product: Product;
+
     if (createProductDto.productType === 'lens') {
       product = this.lensRepository.create({
         ...createProductDto,
@@ -52,6 +53,10 @@ export class ProductsService {
         supplier,
         brand,
       });
+    }
+
+    if (product.salePrice && product.cost) {
+      product.profitMargin = ((product.salePrice - product.cost) / product.cost) * 100;
     }
 
     return await this.productRepository.save(product);
@@ -89,7 +94,13 @@ export class ProductsService {
       product.brand = undefined;
     }
 
+    
     const updated = this.productRepository.merge(product, updateProductDto);
+
+    if (updated.salePrice && updated.cost) {
+      updated.profitMargin = ((updated.salePrice - updated.cost) / updated.cost) * 100;
+    }
+
     return await this.productRepository.save(updated);
   }
 
