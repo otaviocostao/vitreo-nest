@@ -59,7 +59,9 @@ export class ProductsService {
       product.profitMargin = ((product.salePrice - product.cost) / product.cost) * 100;
     }
 
-    return await this.productRepository.save(product);
+    const savedProduct = await this.productRepository.save(product);
+    savedProduct.productType = createProductDto.productType;
+    return savedProduct;
   }
 
   async findAll(): Promise<Product[]> {
