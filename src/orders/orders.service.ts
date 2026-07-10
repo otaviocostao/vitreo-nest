@@ -108,7 +108,10 @@ export class OrdersService {
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    const order = await this.findOne(id);
+    const order = await this.orderRepository.findOne({ where: { id } });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
 
     if (updateOrderDto.customerId) {
       const customer = await this.customerRepository.findOneBy({ id: updateOrderDto.customerId });
@@ -131,6 +134,8 @@ export class OrdersService {
     }
 
     if (updateOrderDto.items) {
+      await this.orderRepository.manager.delete(OrderItem, { order: { id: order.id } });
+
       const orderItems: OrderItem[] = [];
       let calculatedTotal = 0;
 
@@ -144,6 +149,7 @@ export class OrdersService {
         item.product = product;
         item.quantity = itemDto.quantity;
         item.unitPrice = itemDto.unitPrice;
+        item.order = order;
         orderItems.push(item);
 
         calculatedTotal += itemDto.quantity * itemDto.unitPrice;
@@ -153,12 +159,15 @@ export class OrdersService {
     }
 
     if (updateOrderDto.payments) {
+      await this.orderRepository.manager.delete(Payment, { order: { id: order.id } });
+
       const payments: Payment[] = [];
       for (const payDto of updateOrderDto.payments) {
         const payment = new Payment();
         payment.paymentMethod = payDto.paymentMethod;
         payment.amountPaid = payDto.amountPaid;
         payment.installments = payDto.installments ?? 1;
+        payment.order = order;
         payments.push(payment);
       }
       order.payments = payments;
@@ -182,7 +191,8 @@ export class OrdersService {
     const finalValue = order.totalValue - discount;
     order.finalValue = finalValue >= 0 ? finalValue : 0;
 
-    return await this.orderRepository.save(order);
+    await this.orderRepository.save(order);
+    return this.findOne(id);
   }
 
   async remove(id: string): Promise<void> {

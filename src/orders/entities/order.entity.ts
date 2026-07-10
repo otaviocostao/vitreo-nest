@@ -23,7 +23,7 @@ export class Order {
   prescription?: Prescription | null;
 
   @ApiProperty({ description: 'List of items in the order', type: () => [OrderItem] })
-  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true, orphanedRowAction: 'delete' })
   items: OrderItem[];
 
   @ApiPropertyOptional({ description: 'Service Order number', example: 10045 })
@@ -63,7 +63,7 @@ export class Order {
   discount: number;
 
   @ApiProperty({ description: 'List of payments made for the order', type: () => [Payment] })
-  @OneToMany(() => Payment, (payment) => payment.order, { cascade: true })
+  @OneToMany(() => Payment, (payment) => payment.order, { cascade: true, orphanedRowAction: 'delete' })
   payments: Payment[];
 
   @ApiProperty({ description: 'Status of the order', enum: OrderStatus, example: OrderStatus.PENDING })
