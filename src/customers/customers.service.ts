@@ -17,22 +17,26 @@ export class CustomersService {
   ) {}
 
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
-    const emailExists = await this.customerRepository.findOneBy({
-      email: createCustomerDto.email,
-    });
-    if (emailExists) {
-      throw new ConflictException(
-        `Customer with email ${createCustomerDto.email} already exists`,
-      );
+    if (createCustomerDto.email) {
+      const emailExists = await this.customerRepository.findOneBy({
+        email: createCustomerDto.email,
+      });
+      if (emailExists) {
+        throw new ConflictException(
+          `Customer with email ${createCustomerDto.email} already exists`,
+        );
+      }
     }
 
-    const cpfExists = await this.customerRepository.findOneBy({
-      cpf: createCustomerDto.cpf,
-    });
-    if (cpfExists) {
-      throw new ConflictException(
-        `Customer with CPF ${createCustomerDto.cpf} already exists`,
-      );
+    if (createCustomerDto.cpf) {
+      const cpfExists = await this.customerRepository.findOneBy({
+        cpf: createCustomerDto.cpf,
+      });
+      if (cpfExists) {
+        throw new ConflictException(
+          `Customer with CPF ${createCustomerDto.cpf} already exists`,
+        );
+      }
     }
 
     const customer = this.customerRepository.create(createCustomerDto);

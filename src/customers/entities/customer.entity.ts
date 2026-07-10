@@ -16,15 +16,15 @@ export class Customer {
   lastName: string;
 
   @ApiProperty({ description: 'Email address of the customer', example: 'john.doe@example.com' })
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @ApiProperty({ description: 'Primary phone number of the customer', example: '11999999999' })
-  @Column({ length: 20 })
+  @Column({ length: 20, nullable: true })
   phone: string;
 
   @ApiProperty({ description: 'Secondary/alternative phone number of the customer', example: '11988888888' })
-  @Column()
+  @Column({ nullable: true })
   secondaryPhone: string;
 
   @ApiPropertyOptional({ description: 'Street name', example: 'Av. Paulista' })
@@ -56,11 +56,11 @@ export class Customer {
   zipCode?: string;
 
   @ApiProperty({ description: 'Birth date of the customer', example: '1990-01-01', type: String, format: 'date' })
-  @Column({ name: 'birth_date', type: 'date' })
+  @Column({ name: 'birth_date', type: 'date', nullable: true })
   birthDate!: Date;
 
   @ApiProperty({ description: 'CPF (Brazilian tax ID) - 11 digits', example: '12345678901' })
-  @Column({ unique: true, length: 11 })
+  @Column({ unique: true, length: 11, nullable: true })
   cpf!: string;
 
   @ApiPropertyOptional({ description: 'RG (Brazilian identity card)', example: '123456789' })
@@ -68,14 +68,14 @@ export class Customer {
   rg?: string;
 
   @ApiProperty({ description: 'Gender of the customer', example: 'Male' })
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
   @ApiProperty({ description: 'Naturality (place of birth)', example: 'São Paulo - SP' })
-  @Column()
+  @Column({ nullable: true })
   naturality: string;
 
   @ApiProperty({ description: 'Observations or notes about the customer', example: 'Preferred contact time: afternoon.' })
-  @Column()
+  @Column({ nullable: true })
   observations: string;
 }
