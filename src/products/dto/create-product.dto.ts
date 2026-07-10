@@ -24,8 +24,8 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({ description: 'The ID of the brand', example: '123e4567-e89b-12d3-a456-426614174000' })
   @IsUUID()
-  @IsOptional()
-  brandId?: string;
+  @IsNotEmpty()
+  brandId: string;
 
   @ApiPropertyOptional({ description: 'The barcode of the product', example: '7891234567890' })
   @IsString()
@@ -39,8 +39,8 @@ export class CreateProductDto {
 
   @ApiPropertyOptional({ description: 'The sale price of the product', example: 120.00 })
   @IsNumber()
-  @IsOptional()
-  salePrice?: number;
+  @IsNotEmpty()
+  salePrice: number;
 
   @ApiPropertyOptional({ description: 'The stock quantity of the product', example: 10 })
   @IsNumber()

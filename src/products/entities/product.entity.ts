@@ -31,7 +31,7 @@ export abstract class Product {
   cost: number;
 
   @ApiProperty({ description: 'The sale price of the product', example: 120.00 })
-  @Column('decimal', { name: 'sale_price', precision: 10, scale: 2, nullable: true })
+  @Column('decimal', { name: 'sale_price', precision: 10, scale: 2, nullable: false })
   salePrice: number;
 
   @ApiProperty({ description: 'The stock quantity of the product', example: 10 })
