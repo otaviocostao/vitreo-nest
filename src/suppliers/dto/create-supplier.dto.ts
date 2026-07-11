@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsOptional, IsString, IsBoolean, Length, IsEmail } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateSupplierDto {
   @ApiProperty({ description: 'Corporate name of the supplier', example: 'Vitreo Corp S/A' })
@@ -35,6 +36,7 @@ export class CreateSupplierDto {
 
   @ApiPropertyOptional({ description: 'Contact email address of the supplier', example: 'contact@vitreo.com' })
   @IsEmail()
+  @Transform(({ value }) => value === '' ? null : value)
   @IsOptional()
   email?: string;
 
@@ -76,6 +78,7 @@ export class CreateSupplierDto {
   @ApiPropertyOptional({ description: 'ZIP/Postal code - 8 digits', example: '01310100' })
   @IsString()
   @IsOptional()
+  @Transform(({ value }) => value === '' ? null : value)
   @Length(8, 8)
   zipCode?: string;
 }
