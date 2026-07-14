@@ -18,12 +18,14 @@ export class BrandsService {
   async create(createBrandDto: CreateBrandDto): Promise<Brand> {
     const exists = await this.brandRepository.findOneBy({ name: createBrandDto.name });
     if (exists) {
-      throw new ConflictException(`Brand with name "${createBrandDto.name}" already exists`);
+      return exists;
     }
 
-    const supplier = await this.supplierRepository.findOneBy({ id: createBrandDto.supplierId });
-    if (!supplier) {
-      throw new NotFoundException(`Supplier with ID ${createBrandDto.supplierId} not found`);
+    if (createBrandDto.supplierId) {
+      const supplier = await this.supplierRepository.findOneBy({ id: createBrandDto.supplierId });
+      if (!supplier) {
+        throw new NotFoundException(`Supplier with ID ${createBrandDto.supplierId} not found`);
+      }
     }
 
     const brand = this.brandRepository.create(createBrandDto);

@@ -51,4 +51,20 @@ export class SuppliersController {
   remove(@Param('id') id: string) {
     return this.suppliersService.remove(id);
   }
+
+  @Post(':id/brands/:brandId')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Associate a brand with a supplier' })
+  @ApiResponse({ status: 404, description: 'Supplier or Brand not found.' })
+  async associateBrand(@Param('id') id: string, @Param('brandId') brandId: string) {
+    await this.suppliersService.associateBrand(id, brandId);
+  }
+
+  @Delete(':id/brands/:brandId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Dissociate a brand from a supplier' })
+  @ApiResponse({ status: 404, description: 'Brand not found.' })
+  async dissociateBrand(@Param('id') id: string, @Param('brandId') brandId: string) {
+    await this.suppliersService.dissociateBrand(id, brandId);
+  }
 }

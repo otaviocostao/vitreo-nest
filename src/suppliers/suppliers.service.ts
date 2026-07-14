@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { Supplier } from './entities/supplier.entity';
+import { Brand } from '../brands/entities/brand.entity';
 
 @Injectable()
 export class SuppliersService {
   constructor(
     @InjectRepository(Supplier)
     private readonly supplierRepository: Repository<Supplier>,
+    @InjectRepository(Brand)
+    private readonly brandRepository: Repository<Brand>,
   ) { }
 
   async create(createSupplierDto: CreateSupplierDto): Promise<Supplier> {
@@ -27,11 +30,16 @@ export class SuppliersService {
   }
 
   async findAll(): Promise<Supplier[]> {
-    return await this.supplierRepository.find();
+    return await this.supplierRepository.find({
+      relations: ['brands'],
+    });
   }
 
   async findOne(id: string): Promise<Supplier> {
-    const supplier = await this.supplierRepository.findOneBy({ id });
+    const supplier = await this.supplierRepository.findOne({
+      where: { id },
+      relations: ['brands'],
+    });
     if (!supplier) {
       throw new NotFoundException(`Supplier with ID ${id} not found`);
     }
@@ -53,5 +61,26 @@ export class SuppliersService {
   async remove(id: string): Promise<void> {
     const supplier = await this.findOne(id);
     await this.supplierRepository.remove(supplier);
+  }
+
+  async associateBrand(supplierId: string, brandId: string): Promise<void> {
+    const supplier = await this.findOne(supplierId);
+    const brand = await this.brandRepository.findOneBy({ id: brandId });
+    if (!brand) {
+      throw new NotFoundException(`Brand with ID ${brandId} not found`);
+    }
+    brand.supplierId = supplier.id;
+    await this.brandRepository.save(brand);
+  }
+
+  async dissociateBrand(supplierId: string, brandId: string): Promise<void> {
+    const brand = await this.brandRepository.findOneBy({ id: brandId });
+    if (!brand) {
+      throw new NotFoundException(`Brand with ID ${brandId} not found`);
+    }
+    if (brand.supplierId === supplierId) {
+      brand.supplierId = null as any;
+      await this.brandRepository.save(brand);
+    }
   }
 }
