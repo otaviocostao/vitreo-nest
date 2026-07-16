@@ -65,6 +65,18 @@ export class CustomersController {
     return this.customersService.update(id, updateCustomerDto);
   }
 
+  @Patch(':id/active')
+  @ApiOperation({ summary: 'Update customer active status' })
+  @ApiParam({ name: 'id', description: 'The customer ID (UUID)', format: 'uuid' })
+  @ApiOkResponse({ description: 'The customer status has been successfully updated.', type: Customer })
+  @ApiNotFoundResponse({ description: 'Customer not found.' })
+  updateActive(
+    @Param('id') id: string,
+    @Body('isActive') isActive: boolean,
+  ) {
+    return this.customersService.updateActive(id, isActive);
+  }
+
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a customer by ID' })
   @ApiParam({ name: 'id', description: 'The customer ID (UUID)', format: 'uuid' })

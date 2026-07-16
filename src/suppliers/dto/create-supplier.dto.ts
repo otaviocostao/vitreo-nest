@@ -81,4 +81,9 @@ export class CreateSupplierDto {
   @Transform(({ value }) => value === '' ? null : value)
   @Length(8, 8)
   zipCode?: string;
+
+  @ApiPropertyOptional({ description: 'Indicates if the supplier is active', default: true })
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 }

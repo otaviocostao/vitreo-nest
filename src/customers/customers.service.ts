@@ -90,6 +90,12 @@ export class CustomersService {
     return await this.customerRepository.save(updatedCustomer);
   }
 
+  async updateActive(id: string, isActive: boolean): Promise<Customer> {
+    const customer = await this.findOne(id);
+    customer.isActive = isActive;
+    return await this.customerRepository.save(customer);
+  }
+
   async remove(id: string): Promise<void> {
     const customer = await this.findOne(id);
     await this.customerRepository.remove(customer);

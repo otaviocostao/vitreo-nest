@@ -78,4 +78,8 @@ export class Customer {
   @ApiProperty({ description: 'Observations or notes about the customer', example: 'Preferred contact time: afternoon.' })
   @Column({ nullable: true })
   observations: string;
+
+  @ApiProperty({ description: 'Indicates if the customer is active', default: true })
+  @Column({ name: 'is_active', default: true, nullable: false })
+  isActive: boolean;
 }

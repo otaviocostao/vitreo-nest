@@ -70,4 +70,8 @@ export class Supplier {
 
   @OneToMany(() => Brand, (brand) => brand.supplier, { nullable: true, eager: false })
   brands?: Brand[];
+
+  @ApiProperty({ description: 'Indicates if the supplier is active', default: true })
+  @Column({ name: 'is_active', default: true, nullable: false })
+  isActive: boolean;
 }

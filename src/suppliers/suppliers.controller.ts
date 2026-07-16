@@ -43,6 +43,17 @@ export class SuppliersController {
     return this.suppliersService.update(id, updateSupplierDto);
   }
 
+  @Patch(':id/active')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update supplier active status' })
+  @ApiResponse({ status: 404, description: 'Supplier not found.' })
+  updateActive(
+    @Param('id') id: string,
+    @Body('isActive') isActive: boolean,
+  ) {
+    return this.suppliersService.updateActive(id, isActive);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a supplier' })

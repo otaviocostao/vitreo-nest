@@ -43,6 +43,17 @@ export class ProductsController {
     return this.productsService.update(id, updateProductDto);
   }
 
+  @Patch(':id/active')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update product active status' })
+  @ApiResponse({ status: 404, description: 'Product not found.' })
+  updateActive(
+    @Param('id') id: string,
+    @Body('isActive') isActive: boolean,
+  ) {
+    return this.productsService.updateActive(id, isActive);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a product' })

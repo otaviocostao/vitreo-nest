@@ -106,6 +106,12 @@ export class ProductsService {
     return await this.productRepository.save(updated);
   }
 
+  async updateActive(id: string, isActive: boolean): Promise<Product> {
+    const product = await this.findOne(id);
+    product.isActive = isActive;
+    return await this.productRepository.save(product);
+  }
+
   async remove(id: string): Promise<void> {
     const product = await this.findOne(id);
     await this.productRepository.remove(product);

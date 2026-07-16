@@ -5,6 +5,7 @@ import {
   IsString,
   Length,
   IsDateString,
+  IsBoolean,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -113,4 +114,9 @@ export class CreateCustomerDto {
   @IsOptional()
   @Transform(({ value }) => value === '' ? null : value)
   observations: string;
+
+  @ApiPropertyOptional({ description: 'Indicates if the customer is active', default: true })
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean;
 }
