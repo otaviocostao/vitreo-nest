@@ -154,8 +154,11 @@ export class OrdersService {
 
         calculatedTotal += itemDto.quantity * itemDto.unitPrice;
       }
+
+      const discount = updateOrderDto.discount || 0;
+      const finalValue = calculatedTotal - discount;
       order.items = orderItems;
-      order.totalValue = calculatedTotal;
+      order.totalValue = finalValue;
     }
 
     if (updateOrderDto.payments) {
