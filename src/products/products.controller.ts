@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiCreatedResponse, ApiNoContentResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FilterProductDto } from './dto/filter-product.dto';
 
 @ApiBearerAuth()
 @ApiTags('Products')
@@ -22,9 +23,9 @@ export class ProductsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get all products' })
-  findAll() {
-    return this.productsService.findAll();
+  @ApiOperation({ summary: 'Get all products with optional filtering and pagination' })
+  findAll(@Query() filterDto: FilterProductDto) {
+    return this.productsService.findAll(filterDto);
   }
 
   @Get(':id')

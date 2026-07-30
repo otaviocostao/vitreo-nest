@@ -11,6 +11,7 @@ export abstract class Product {
   id: string;
 
   @ApiProperty({ description: 'The type of product', example: 'lens' })
+  @Column({ name: 'product_type', insert: false, update: false })
   productType: string;
 
   @ApiProperty({ description: 'The name of the product', example: 'Premium Anti-Reflexive Lens' })

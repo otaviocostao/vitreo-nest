@@ -10,6 +10,8 @@ import { SuppliersService } from '../suppliers/suppliers.service';
 import { BrandsService } from '../brands/brands.service';
 import { Brand } from '../brands/entities/brand.entity';
 
+import { FilterProductDto } from './dto/filter-product.dto';
+
 @Injectable()
 export class ProductsService {
   constructor(
@@ -64,10 +66,62 @@ export class ProductsService {
     return savedProduct;
   }
 
-  async findAll(): Promise<Product[]> {
-    return await this.productRepository.find({
-      relations: ['supplier', 'brand'],
-    });
+  async findAll(filterDto?: FilterProductDto): Promise<any> {
+    const page = filterDto?.page ?? 0;
+    const size = filterDto?.size ?? 10;
+    const skip = page * size;
+
+    const queryBuilder = this.productRepository.createQueryBuilder('product')
+      .leftJoinAndSelect('product.supplier', 'supplier')
+      .leftJoinAndSelect('product.brand', 'brand');
+
+    if (filterDto?.query) {
+      const q = `%${filterDto.query.toLowerCase()}%`;
+      queryBuilder.andWhere(
+        '(LOWER(product.name) LIKE :q OR LOWER(product.reference) LIKE :q OR LOWER(product.barcode) LIKE :q OR LOWER(brand.name) LIKE :q)',
+        { q },
+      );
+    }
+
+    if (filterDto?.type) {
+      queryBuilder.andWhere('LOWER(product.productType) = :type', {
+        type: filterDto.type.toLowerCase(),
+      });
+    }
+
+    if (filterDto?.sort) {
+      const [field, order] = filterDto.sort.split(',');
+      const sortOrder = order?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+      queryBuilder.orderBy(`product.${field || 'name'}`, sortOrder);
+    } else {
+      queryBuilder.orderBy('product.name', 'ASC');
+    }
+
+    queryBuilder.skip(skip).take(size);
+
+    const [content, totalElements] = await queryBuilder.getManyAndCount();
+    const totalPages = Math.ceil(totalElements / size) || 1;
+
+    return {
+      content,
+      pageable: {
+        pageNumber: page,
+        pageSize: size,
+        sort: { sorted: true, unsorted: false, empty: false },
+        offset: skip,
+        paged: true,
+        unpaged: false,
+      },
+      totalPages,
+      totalElements,
+      last: page >= totalPages - 1,
+      size,
+      number: page,
+      sort: { sorted: true, unsorted: false, empty: false },
+      numberOfElements: content.length,
+      first: page === 0,
+      empty: content.length === 0,
+    };
   }
 
   async findOne(id: string): Promise<Product> {
