@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsIn, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsNumber, IsBoolean, IsIn, IsUUID, IsEnum } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { FrameMaterial } from '../enums/frame-material.enum';
 
 export class CreateProductDto {
   @ApiProperty({ description: 'The type of product', enum: ['lens', 'frame'], example: 'lens' })
@@ -74,10 +75,10 @@ export class CreateProductDto {
   @IsOptional()
   color?: string;
 
-  @ApiPropertyOptional({ description: 'The material of the frame (optional for type frame)', example: 'Acetate' })
-  @IsString()
+  @ApiPropertyOptional({ description: 'The material of the frame (optional for type frame)', enum: FrameMaterial, example: FrameMaterial.ACETATO })
+  @IsEnum(FrameMaterial)
   @IsOptional()
-  material?: string;
+  material?: FrameMaterial;
 
   @ApiPropertyOptional({ description: 'The size of the frame (optional for type frame)', example: '54-18-140' })
   @IsString()
