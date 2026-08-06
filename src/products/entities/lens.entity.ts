@@ -3,6 +3,7 @@ import { Product } from './product.entity';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import { LensMaterial } from '../enums/lens-material.enum';
+import { LensType } from '../enums/lens-type.enum';
 
 @ChildEntity('lens')
 export class Lens extends Product {
@@ -14,7 +15,7 @@ export class Lens extends Product {
   @Column({ name: 'treatment', length: 100, nullable: true })
   treatment?: string;
 
-  @ApiPropertyOptional({ description: 'The type of lens', example: 'Single Vision' })
-  @Column({ name: 'lens_type', length: 50, nullable: true })
-  lensType?: string;
+  @ApiPropertyOptional({ description: 'The type of lens', enum: LensType, example: LensType.VISAO_SIMPLES })
+  @Column({ name: 'lens_type', type: 'enum', enum: LensType, nullable: true })
+  lensType?: LensType;
 }

@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FrameMaterial } from '../enums/frame-material.enum';
 import { LensMaterial } from '../enums/lens-material.enum';
+import { LensType } from '../enums/lens-type.enum';
 
 export class CreateProductDto {
   @ApiProperty({ description: 'The type of product', enum: ['lens', 'frame'], example: 'lens' })
@@ -71,11 +72,11 @@ export class CreateProductDto {
   @IsOptional()
   treatment?: string;
 
-  @ApiPropertyOptional({ description: 'The type of lens (optional for type lens)', example: 'Single Vision' })
+  @ApiPropertyOptional({ description: 'The type of lens (optional for type lens)', enum: LensType, example: LensType.VISAO_SIMPLES })
   @Transform(({ value }) => (value === '' ? undefined : value))
-  @IsString()
+  @IsEnum(LensType)
   @IsOptional()
-  lensType?: string;
+  lensType?: LensType;
 
   // Frame specific fields
   @ApiPropertyOptional({ description: 'The color of the frame (optional for type frame)', example: 'Matte Black' })
