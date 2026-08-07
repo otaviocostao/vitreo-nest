@@ -4,6 +4,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FrameMaterial } from '../enums/frame-material.enum';
 import { LensMaterial } from '../enums/lens-material.enum';
 import { LensType } from '../enums/lens-type.enum';
+import { LensTreatment } from '../enums/lens-treatment.enum';
 
 export class CreateProductDto {
   @ApiProperty({ description: 'The type of product', enum: ['lens', 'frame'], example: 'lens' })
@@ -66,11 +67,11 @@ export class CreateProductDto {
   @IsOptional()
   lensMaterial?: LensMaterial;
 
-  @ApiPropertyOptional({ description: 'The treatment applied to the lens (optional for type lens)', example: 'Anti-glare' })
+  @ApiPropertyOptional({ description: 'The treatment applied to the lens (optional for type lens)', enum: LensTreatment, example: LensTreatment.ANTIRREFLEXO })
   @Transform(({ value }) => (value === '' ? undefined : value))
-  @IsString()
+  @IsEnum(LensTreatment)
   @IsOptional()
-  treatment?: string;
+  treatment?: LensTreatment;
 
   @ApiPropertyOptional({ description: 'The type of lens (optional for type lens)', enum: LensType, example: LensType.VISAO_SIMPLES })
   @Transform(({ value }) => (value === '' ? undefined : value))
