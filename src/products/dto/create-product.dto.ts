@@ -31,7 +31,7 @@ export class CreateProductDto {
   @ApiPropertyOptional({ description: 'The ID of the brand', example: '123e4567-e89b-12d3-a456-426614174000' })
   @Transform(({ value }) => (value === '' ? undefined : value))
   @IsUUID()
-  @IsOptional()
+  @IsNotEmpty()
   brandId?: string;
 
   @ApiPropertyOptional({ description: 'The barcode of the product', example: '7891234567890' })
