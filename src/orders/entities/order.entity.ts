@@ -40,7 +40,7 @@ export class Order {
 
   @ApiPropertyOptional({ description: 'Actual delivery date', example: '2026-06-04', type: String, format: 'date' })
   @Column('date', { name: 'delivery_date', nullable: true })
-  deliveryDate?: Date;
+  deliveryDate?: Date | null;
 
   @ApiPropertyOptional({ description: 'Value of the frames', example: 150.00 })
   @Column('decimal', { name: 'frame_value', precision: 10, scale: 2, nullable: true })

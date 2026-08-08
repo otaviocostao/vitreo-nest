@@ -9,6 +9,7 @@ import { Payment } from './entities/payment.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { Prescription } from '../prescriptions/entities/prescription.entity';
 import { Product } from '../products/entities/product.entity';
+import { OrderStatus } from './enums/order-status.enum';
 
 @Injectable()
 export class OrdersService {
@@ -199,5 +200,22 @@ export class OrdersService {
   async remove(id: string): Promise<void> {
     const order = await this.findOne(id);
     await this.orderRepository.remove(order);
+  }
+
+  async updateStatus(id: string, status: OrderStatus): Promise<Order> {
+    const order = await this.orderRepository.findOne({ where: { id } });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    order.status = status;
+    if (status === OrderStatus.DELIVERED) {
+      order.deliveryDate = new Date();
+    } else {
+      order.deliveryDate = null;
+    }
+
+    await this.orderRepository.save(order);
+    return this.findOne(id);
   }
 }

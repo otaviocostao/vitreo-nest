@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiCreatedResponse, ApiNoContentRes
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 @ApiBearerAuth()
 @ApiTags('orders')
@@ -40,6 +41,14 @@ export class OrdersController {
   @ApiResponse({ status: 404, description: 'Order, Customer, Prescription or Product not found.' })
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.ordersService.update(id, updateOrderDto);
+  }
+
+  @Patch(':id/status')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update order status' })
+  @ApiResponse({ status: 404, description: 'Order not found.' })
+  updateStatus(@Param('id') id: string, @Body() updateOrderStatusDto: UpdateOrderStatusDto) {
+    return this.ordersService.updateStatus(id, updateOrderStatusDto.status);
   }
 
   @Delete(':id')
